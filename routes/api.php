@@ -62,7 +62,7 @@ Route::prefix('events')->group(function () {
     // });
 });
 
-Route::prefix('posts')->group(function () {
+Route::prefix('posts')->group(function () { 
     Route::get('/', [PostController::class, 'index']);
     Route::get('/{id}', [PostController::class, 'show']);
     // Route::middleware(['checkRole:superAdmin,admin,editor,publisher'])->group(function () {
