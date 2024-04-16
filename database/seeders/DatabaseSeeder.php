@@ -31,7 +31,6 @@ class DatabaseSeeder extends Seeder
         \App\Models\StudyPlan::factory(29)->create();
         \App\Models\Applying::factory(6)->create();
         \App\Models\ApplyingStudy::factory(6)->create();
-
         \App\Models\User::insert([
             [
                 'name' => 'Ziad Hassan',
