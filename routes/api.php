@@ -38,7 +38,7 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
 */
 
 
-Route::group(['middleware' => 'cors'], function () {
+// Route::group(['middleware' => 'cors'], function () {
 
     
 
@@ -200,4 +200,4 @@ Route::prefix('grade')->group(function () {
     Route::post('/update', [GradesController::class, 'update']);
     // });
 });
-});
+// });
