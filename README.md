@@ -31,13 +31,13 @@ Welcome to the first version of the University Management System backend! This b
 1. **Clone the repository:**
 
    ```bash
-   git clone https://github.com/Ziad-Abaza/BATU-LARAVEL-VUE.git
+   git clone https://github.com/algamelomer/batu-backend.git
    ```
 
 2. **Navigate to the project directory:**
 
    ```bash
-   cd BATU-LARAVEL-VUE/back-end
+   cd batu-backend
    ```
 
 3. **Install dependencies:**
