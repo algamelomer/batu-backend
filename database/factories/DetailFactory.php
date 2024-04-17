@@ -30,7 +30,7 @@ class DetailFactory extends Factory
                 'title' => 'students',
                 'description' => NULL,
                 'image' => 'https://linkdhub.github.io/batu-images/images/image%20(5).svg',
-                'counter_number' => 8300,
+                'counter_number' => 3082,
                 'category' => 'counter',
             ],
             [
