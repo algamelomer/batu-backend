@@ -37,6 +37,12 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
 |--------------------------------------------------------------------------
 */
 
+
+Route::group(['middleware' => 'cors'], function () {
+
+    
+
+    
 Route::prefix('users')->middleware(['auth:sanctum', 'checkRole:superAdmin,admin'])->group(function () {
     Route::get('/', [UserController::class, 'index']);
     Route::get('/{id}', [UserController::class, 'show']);
@@ -193,4 +199,5 @@ Route::prefix('grade')->group(function () {
     Route::post('/', [GradesController::class, 'store']);
     Route::post('/update', [GradesController::class, 'update']);
     // });
+});
 });
