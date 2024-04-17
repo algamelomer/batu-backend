@@ -18,10 +18,7 @@ Route::get('/', function () {
 });
 
 
-// Route::get('{path}', function(){
-//     return view('spa');
-// })->where('path','(.*)')
-// Route::get('/{any}', function () {
-//     return view('app');
-// })->where('any', '.*');
+Route::get('/{any}', function () {
+    return view('spa');
+})->where('any', '.*');
 
