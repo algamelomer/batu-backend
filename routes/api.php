@@ -17,6 +17,7 @@ use App\Http\Controllers\applying\ApplyingController;
 use App\Http\Controllers\applying\ApplyingStudyController;
 use App\Http\Controllers\grades\GradesController;
 use App\Http\Controllers\Users\UserController;
+use App\Http\Controllers\SpaController;
 
 /*
 |--------------------------------------------------------------------------
@@ -200,6 +201,4 @@ Route::prefix('grade')->group(function () {
     });
 });
 
-Route::get('/{any}', function () {
-    return view('spa');
-})->where('any', '.*');
+

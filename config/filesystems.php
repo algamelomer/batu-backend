@@ -44,6 +44,30 @@ return [
             'throw' => false,
         ],
 
+        'image' => [
+            'driver' => 'local',
+            'root' => public_path('/assets'),
+            'url' => env('APP_URL').'/images',
+            'visibility' => 'public',
+            'throw' => false,
+        ],
+
+        'video' => [
+            'driver' => 'local',
+            'root' => public_path('/assets'),
+            'url' => env('APP_URL').'/video',
+            'visibility' => 'public',
+            'throw' => false,
+        ],
+
+        'file' => [
+            'driver' => 'local',
+            'root' => public_path('/assets'),
+            'url' => env('APP_URL').'/files',
+            'visibility' => 'public',
+            'throw' => false,
+        ],
+
         's3' => [
             'driver' => 's3',
             'key' => env('AWS_ACCESS_KEY_ID'),

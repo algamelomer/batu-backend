@@ -91,6 +91,12 @@ Welcome to the first version of the University Management System backend! This b
 
    Note for comparison file:
 
+9. **for download phpoffice/phpspreadsheet:**
+
+   ```bash
+    composer require phpoffice/phpspreadsheet --ignore-platform-req=ext-gd --with-all-dependencies 
+   ```
+
 Whenever an update is made to the database files, the following steps must be taken each time:
 1. Update the database files by running the command:
    ```
