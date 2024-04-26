@@ -15,7 +15,6 @@ class AboutUniversity extends Model
         'video',
         'description_video',
         'description',
-        'type',
         'user_id'
     ];
 

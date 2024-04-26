@@ -21,8 +21,8 @@ class Post extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function postFiles()
+    public function postMedia()
     {
-        return $this->hasMany(PostFile::class, 'post_id');
+        return $this->hasMany(PostMedia::class, 'post_id');
     }
 }

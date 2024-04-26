@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('sitting_num');
             $table->string('name');
             $table->enum('academic_year',[1,2,3,4]);
-            $table->foreignId('department_id')->constrained()->onDelete('cascade')->onUpdate('cascade');
+            $table->foreignId('department_id')->constrained('departments')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
         });
     }

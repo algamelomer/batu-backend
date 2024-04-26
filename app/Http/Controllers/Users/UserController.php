@@ -22,7 +22,8 @@ class UserController extends Controller
     */
     public function index()
     {
-        return $this->getRecord(new User, 'id', 'name', 'email', 'role');
+        return $this->getRecord(new User, 'id', 'name', 'email', 'role')->whereNotIn('role', ['superAdmin']);
+        // return $this->getRecord(new User, 'id', 'name', 'email', 'role');
     }
 
     /*
@@ -32,7 +33,8 @@ class UserController extends Controller
     */
     public function show($id)
     {
-        return $this->findById(new User, $id);
+        return $this->findById(new User, $id)->whereNotIn('role', ['superAdmin']);
+        // return $this->findById(new User, $id);
     }
 
     /*
@@ -130,19 +132,30 @@ class UserController extends Controller
     */
     public function destroy($id)
     {
+        // Find the user
         $user = $this->findById(new User, $id);
+
+        // Check if the user exists
+        if (!$user) {
+            return response()->json(['error' => 'User not found.'], 404);
+        }
 
         // Check permission of user
         $currentUser = auth()->user();
         if (!in_array($currentUser->role, ['superAdmin', 'admin'])) {
-            return response()->json(['error' => 'You do not have the permission to delete this user.'], 403);
+            return response()->json(['error' => 'You do not have the permission to delete users.'], 403);
         }
 
         // Check if trying to delete a superAdmin
         if ($user->role === 'superAdmin') {
-            return response()->json(['error' => 'You do not have the permission to delete the superAdmin.'], 403);
+            return response()->json(['error' => 'You do not have the permission to delete a superAdmin.'], 403);
         }
 
-        return $this->deleteRecord($user);
+        // Attempt to delete the user
+        if ($user->delete()) {
+            return response()->json(['message' => 'User deleted successfully.'], 200);
+        } else {
+            return response()->json(['error' => 'Failed to delete user.'], 500);
+        }
     }
 }

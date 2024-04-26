@@ -12,19 +12,14 @@ class Department extends Model
     protected $fillable = [
         'name',
         'description',
-        'description_video',
         'logo',
         'image',
         'video',
+        'description_video',
+        'mission',
+        'vision',
         'faculty_id',
         'user_id',
-        'job_opportunities',
-        'mission',
-        'vision'
-    ];
-
-    protected $casts = [
-        'job_opportunities' => 'json',
     ];
 
     public function user()
@@ -42,9 +37,14 @@ class Department extends Model
         return $this->hasMany(StudentProjects::class);
     }
 
+    public function jobOpportunities()
+    {
+        return $this->hasMany(JobOpportunities::class);
+    }
+
     public function gradeStudent()
     {
-        return $this->hasMany(StudentProjects::class);
+        return $this->hasMany(GradeStudent::class);
     }
 
     public function studyPlan()
@@ -52,13 +52,14 @@ class Department extends Model
         return $this->hasMany(StudyPlan::class);
     }
 
-    public function facultyMember()
+    public function staffPrograms()
     {
-        return $this->hasMany(FacultyMember::class);
+        return $this->hasMany(StaffPrograms::class);
     }
 
-    public function supervisoryTeam()
+    public function staffMembers()
     {
-        return $this->hasMany(SupervisoryTeam::class);
+        return $this->hasMany(StaffMembers::class);
     }
+
 }

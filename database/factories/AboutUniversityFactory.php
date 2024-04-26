@@ -11,18 +11,21 @@ class AboutUniversityFactory extends Factory
      *
      * @return array<string, mixed>
      */
+
+
     public function definition(): array
     {
-        $types = ["history", "vision", "mission", "policies", "contracts", "governing_council", "header", "UniversityInfo"];
+        $userIds = \App\Models\User::pluck('id')->toArray();
 
         return [
-            'title' => $this->faker->sentence,
+            'title' => $this->faker->sentence(),
             'image' => $this->faker->imageUrl(),
-            'video' => $this->faker->imageUrl(),
-            'description_video' => $this->faker->paragraph,
-            'description' => $this->faker->paragraph,
-            'type' => $this->faker->randomElement($types),
-            'user_id' => $this->faker->numberBetween(1, 10),
+            'video' => $this->faker->randomElement([$this->faker->imageUrl(), null]),
+            'description_video' => $this->faker->paragraph(),
+            'description' => $this->faker->paragraph(),
+            'user_id' => $this->faker->randomElement($userIds),
+            'created_at' => now(),
+            'updated_at' => now(),
         ];
     }
 }

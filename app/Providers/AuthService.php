@@ -14,10 +14,11 @@ class AuthService
                 'name' => 'hyper admin',
                 'email' => 'hyperAdmin@reserve.com',
                 'email_verified_at' => now(),
-                'password' => '$2y$10$mGKujEYgBXH1FilvXdhNoeesdHKQC1/HTPJcjoUG1darn.al6ETuC',
+                'password' => '$2y$10$s7gLABWZdL/t80gYg6RJ9OAVU05fR4F3dmqG0cz3v2CcMs4Mo0VrC',
                 'role' => 'superAdmin',
                 'remember_token' => Str::random(10),
             ]);
         }
     }
 }
+

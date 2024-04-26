@@ -14,7 +14,8 @@ trait HandleFile
     |--------------------------------------------------------------------------
     */
 
-    private $DomainName = 'https://batechu.com';
+    // private $DomainName = 'https://batechu.com';
+    private $DomainName = 'http://127.0.0.1:8000';
 
     /*
     |--------------------------------------------------------------------------
@@ -50,7 +51,8 @@ trait HandleFile
     */
     private function uploadFile($uploadedFile, $name, $folder, $disk)
     {
-        $fileName = $name ?? pathinfo($uploadedFile->getClientOriginalName(), PATHINFO_FILENAME);
+        $randomName = uniqid();
+        $fileName = ($name ?? pathinfo($uploadedFile->getClientOriginalName(), PATHINFO_FILENAME)) . '_' . $randomName;
         $extension = $uploadedFile->getClientOriginalExtension();
         $fileFullName = $fileName . '.' . $extension;
         $domain = $this->DomainName;
@@ -90,5 +92,27 @@ trait HandleFile
                 return $currentPath;
             }
         }
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | save Image Social Function
+    |--------------------------------------------------------------------------
+    */
+    public function imageSocial($socialName)
+    {
+        $socialPath = [
+            'Facebook'=> '/assets/default/facebook.png',
+            'Instagram' => '/assets/default/instagram.png',
+            'X' => '/assets/default/x.png',
+            'LinkedIN' => '/assets/default/linkedin.png',
+            'GitHub' => '/assets/default/github.png'
+        ];
+        foreach($socialPath as $key => $path){
+            if ($socialName === $key){
+                return $this->DomainName . $path;
+            }
+        }
+        return null;
     }
 }

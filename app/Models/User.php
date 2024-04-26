@@ -73,4 +73,75 @@ class User extends Authenticatable
     {
         return $this->hasMany(AboutUniversity::class);
     }
+
+    public function socialLinks()
+    {
+        return $this->hasMany(SocialLinks::class);
+    }
+
+    public function politics()
+    {
+        return $this->hasMany(Politics::class);
+    }
+
+    public function leaderCouncil()
+    {
+        return $this->hasMany(LeaderCouncil::class);
+    }
+
+    public function facultyLeaders()
+    {
+        return $this->hasMany(FacultyLeaders::class);
+    }
+
+    public function staffPrograms()
+    {
+        return $this->hasMany(StaffPrograms::class);
+    }
+
+    public function staffMembers()
+    {
+        return $this->hasMany(StaffMembers::class);
+    }
+
+    public function universityLeaders()
+    {
+        return $this->hasMany(UniversityLeaders::class);
+    }
+
+    public function applying()
+    {
+        return $this->hasMany(Applying::class);
+    }
+
+    public function applyStudies()
+    {
+        return $this->hasMany(ApplyStudies::class);
+    }
+
+    public function applyStaff()
+    {
+        return $this->hasMany(ApplyStaff::class);
+    }
+
+    public function studentProjects()
+    {
+        return $this->hasMany(StudentProjects::class);
+    }
+
+    public function  staffSocial()
+    {
+        return  $this->hasMany(staffSocial::class);
+    }
+
+    public function  facultyAgent()
+    {
+        return  $this->hasMany(FacultyAgent::class);
+    }
+
+    public function  facultyAgentStaff()
+    {
+        return  $this->hasMany(FacultyAgentStaff::class);
+    }
+
 }

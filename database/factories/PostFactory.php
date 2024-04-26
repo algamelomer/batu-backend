@@ -65,11 +65,13 @@ class PostFactory extends Factory
         $post = $posts[$index];
         $index = ($index + 1) % count($posts);
 
+        $userIds = \App\Models\User::pluck('id')->toArray();
+
         return [
             'title' => $post['title'],
             'description' => $post['description'],
             'type' => $post['type'],
-            'user_id' => $post['user_id'],
+            'user_id' => $this->faker->randomElement($userIds),
             'created_at' => now(),
             'updated_at' => now()
         ];

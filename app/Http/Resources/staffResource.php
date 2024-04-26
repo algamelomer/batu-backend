@@ -17,24 +17,17 @@ class StaffResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'department_id' => $this->department_id,
-            'faculty_id' => $this->faculty_id,
-            'user_id' => $this->user_id,
             'name' => $this->name,
             'image' => $this->image,
-            'title' => $this->title,
-            'sub_title' => $this->sub_title,
-            'head_description' => $this->head_description,
-            'career' => $this->career,
-            'scientific_interests' => $this->scientific_interests,
-            'experience' => $this->experience,
-            'word' => $this->word,
+            'position' => $this->position,
+            'category' => $this->category ?? null,
             'email' => $this->email,
-            'certificates_title' => $this->certificates_title,
-            'certificates_description' => $this->certificates_description,
             'cv' => $this->cv,
-            'Researches_title' => $this->Researches_title,
-            'Researches_description' => $this->Researches_description,
+            'description' => $this->description ?? null,
+            'word' => $this->word ?? null, 
+            'user_id' => $this->user_id,
+            'faculty_id' => $this->faculty_id,
+            'department_id' => $this->department_id,
         ];
     }
 }

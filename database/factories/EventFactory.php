@@ -59,11 +59,13 @@ class EventFactory extends Factory
         $event = $events[$index];
         $index = ($index + 1) % count($events);
 
+        $userIds = \App\Models\User::pluck('id')->toArray();
+
         return [
             'title' => $event['title'],
             'description' => $event['description'],
             'date' => $event['date'],
-            'user_id' => $event['user_id'],
+            'user_id' => $this->faker->randomElement($userIds),
             'created_at' => now(),
             'updated_at' => now(),
         ];

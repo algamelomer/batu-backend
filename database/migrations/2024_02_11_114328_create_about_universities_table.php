@@ -14,11 +14,10 @@ return new class extends Migration
         Schema::create('about_universities', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->string('image')->nullable();
+            $table->string('image');
             $table->string('video')->nullable();
             $table->text('description_video')->nullable();
-            $table->text('description')->nullable();
-            $table->enum('type',["history", "vision", "mission", "policies", "contracts", "governing_council", "header", "UniversityInfo"]);
+            $table->text('description');
             $table->foreignId('user_id')->constrained('users')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
         });

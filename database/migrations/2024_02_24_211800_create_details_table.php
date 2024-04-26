@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->text('description')->nullable();
-            $table->string('image')->nullable();
+            $table->string('image');
             $table->integer('counter_number')->nullable();
             $table->enum('category', ['counter', 'activity']);
             $table->timestamps();

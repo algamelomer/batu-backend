@@ -10,11 +10,11 @@ class Faculty extends Model
     use HasFactory;
     protected $fillable = [
         'name',
+        'description',
         'image',
         'logo',
         'video',
         'description_video',
-        'description',
         'vision',
         'mission',
         'user_id'
@@ -30,18 +30,23 @@ class Faculty extends Model
         return $this->hasMany(Department::class);
     }
 
-    public function supervisoryTeams()
+    public function facultyLeaders()
     {
-        return $this->hasMany(SupervisoryTeam::class);
+        return $this->hasMany(FacultyLeaders::class);
     }
 
-    public function facultyMember()
+    public function applyStudies()
     {
-        return $this->hasMany(FacultyMember::class);
+        return $this->hasMany(ApplyStudies::class);
     }
 
-    public function studentProjects()
+    public function staffMembers()
     {
-        return $this->hasMany(StudentProjects::class);
+        return $this->hasMany(StaffMembers::class);
+    }
+
+    public function  facultyAgentStaff()
+    {
+        return  $this->hasMany(FacultyAgentStaff::class);
     }
 }

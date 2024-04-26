@@ -24,7 +24,6 @@ class StudentProjectsFactory extends Factory
                 'image' => 'https://linkdhub.github.io/batu-images/images/image%20(12).png',
                 'team_name' => 'alians team',
                 'department_id' => 1,
-                'faculty_id' => 1,
             ],
             [
                 'name' => 'self driving car',
@@ -63,6 +62,7 @@ class StudentProjectsFactory extends Factory
         static $index = 0;
         $project = $projects[$index];
         $index = ($index + 1) % count($projects);
+        $userIds = \App\Models\User::pluck('id')->toArray();
 
         return [
             'name' => $project['name'],
@@ -71,7 +71,7 @@ class StudentProjectsFactory extends Factory
             'file' => null,
             'team_name' => $project['team_name'],
             'department_id' => $project['department_id'],
-            'faculty_id' => $project['faculty_id'],
+            'user_id' => $this->faker->randomElement($userIds),
         ];
     }
 }

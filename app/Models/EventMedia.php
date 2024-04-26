@@ -10,8 +10,8 @@ class EventMedia extends Model
     use HasFactory;
     protected $fillable = [
         'event_id',
-        'file',
-        'type'
+        'image',
+        'video',
     ];
 
     public function event()

@@ -25,9 +25,9 @@ class Event extends Model
     {
         return $this->hasMany(EventMedia::class);
     }
-    public function facultyMembers()
-    {
-        return $this->belongsToMany(FacultyMember::class);
-    }
 
+    public function eventStaffProgram()
+    {
+        return $this->hasMany(EventStaffProgram::class);
+    }
 }

@@ -14,7 +14,8 @@ class StudyPlan extends Model
         'academic_year',
         'semester',
         'credits',
-        'lecturer_id',
+        'staff_programs_id',
+        'staff_members_id',
         'user_id',
         'department_id'
     ];
@@ -29,8 +30,14 @@ class StudyPlan extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function lecturer()
+    public function staffPrograms()
     {
-        return $this->belongsTo(FacultyMember::class, 'lecturer_id');
+        return $this->belongsTo(StaffPrograms::class);
     }
+
+    public function staffMembers()
+    {
+        return $this->belongsTo(StaffMembers::class);
+    }
+
 }

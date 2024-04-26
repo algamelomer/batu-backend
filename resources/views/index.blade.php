@@ -1,36 +1,22 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <title>{{env('APP_NAME')}}</title>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
 
-    @vite(['resources/scss/main.scss', 'resources/js/main.js'])
+    <title>Laravel vue role permission management</title>
 
-    <script>
-        window.AppConfig = {
-            name: '{{ env('APP_NAME') }}',
-            logo: '{{ env('APP_LOGO') }}',
-            url: '{{ env('APP_URL') }}',
-            csrf: '{{ csrf_token() }}',
-            defaultLocale: '{{ env('APP_LOCALE', 'en') }}',
-            defaultTimezone: '{{ env('APP_TIMEZONE', 'UTC') }}',
-            locales: {
-                en: {!! json_encode(\Illuminate\Support\Facades\Lang::get('frontend', [], 'en')) !!},
-                mk: {!! json_encode(\Illuminate\Support\Facades\Lang::get('frontend', [], 'mk')) !!},
-            }
-        }
-    </script>
+    {{-- @vite('resources/js/app.js') --}}
 </head>
 
-<body>
-<noscript>
-    <strong>We're sorry but this application doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
-</noscript>
-
-<div id="app"></div>
-
+<body class="box-border p-0 m-0 bg-light-bg text-light-color dark:bg-dark-bg dark:text-dark-color font-lora italic">
+    <noscript>
+        <strong>Please enable javascript otherwise this website will not work</strong>
+    </noscript>
+    <div id="app"></div>
 </body>
 
 </html>

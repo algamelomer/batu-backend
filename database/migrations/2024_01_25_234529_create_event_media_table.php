@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('event_media', function (Blueprint $table) {
             $table->id();
             $table->foreignId('event_id')->constrained('events')->onDelete('cascade');
-            $table->string('file');
-            $table->enum('type', ['image', 'video', null])->nullable();
+            $table->string('image')->nullable();
+            $table->string('video')->nullable();
             $table->timestamps();
         });
     }

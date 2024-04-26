@@ -14,29 +14,44 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        \App\Models\User::factory(30)->create();
+        \App\Models\User::factory(15)->create();
         \App\Models\Faculty::factory(2)->create();
-        \App\Models\AboutUniversity::factory(10)->create();
-        \App\Models\Detail::factory(6)->create();
-        \App\Models\department::factory(11)->create();
+        \App\Models\department::factory(10)->create();
+        \App\Models\StaffPrograms::factory(10)->create();
+        \App\Models\StaffMembers::factory(10)->create();
+        \App\Models\StudentProjects::factory(5)->create();
+        \App\Models\AboutUniversity::factory(3)->create();
+        \App\Models\UniversityLeaders::factory(4)->create();
+        \App\Models\Certificates::factory(17)->create();
+        \App\Models\Researches::factory(17)->create();
+        \App\Models\FacultyLeaders::factory(4)->create();
+        \App\Models\Feedback::factory(10)->create();
+        \App\Models\JobOpportunities::factory(10)->create();
+        \App\Models\LeaderCouncil::factory(10)->create();
+        \App\Models\Politics::factory(20)->create();
+        \App\Models\PresidentAlerts::factory(10)->create();
+        \App\Models\SocialLinks::factory(4)->create();
+        \App\Models\Detail::factory(3)->create();
         \App\Models\post::factory(4)->create();
-        \App\Models\PostFile::factory(4)->create();
+        \App\Models\PostMedia::factory(4)->create();
         \App\Models\Event::factory(4)->create();
         \App\Models\EventMedia::factory(4)->create();
-        \App\Models\Job::factory(7)->create();
-        \App\Models\JobApplication::factory(7)->create();
-        \App\Models\FacultyMember::factory(13)->create();
-        \App\Models\SupervisoryTeam::factory(3)->create();
-        \App\Models\StudentProjects::factory(12)->create();
-        \App\Models\StudyPlan::factory(29)->create();
-        \App\Models\Applying::factory(6)->create();
-        \App\Models\ApplyingStudy::factory(6)->create();
+        \App\Models\EventStaffProgram::factory(4)->create();
+        \App\Models\StudyPlan::factory(15)->create();
+        \App\Models\FacultyAgent::factory(3)->create();
+        \App\Models\FacultyAgentStaff::factory(15)->create();
+        \App\Models\Applying::factory(2)->create();
+        \App\Models\ApplyStaff::factory(5)->create();
+        \App\Models\ApplyStudies::factory(6)->create();
+        \App\Models\StaffSocial::factory(20)->create();
+        \App\Models\StudentProjects::factory(20)->create();
+        \App\Models\JobApplications::factory(20)->create();
         \App\Models\User::insert([
             [
                 'name' => 'Ziad Hassan',
                 'email' => 'zeyad.h.abaza@gmail.com',
                 'email_verified_at' => now(),
-                'password' => '$2y$10$mGKujEYgBXH1FilvXdhNoeesdHKQC1/HTPJcjoUG1darn.al6ETuC',
+                'password' => '$2y$10$/j.g3Z2dUe9quhclr0PtNOQDnuVHtxaYo6AWUvyY1Zyyf2M2C/Q6u',
                 'role' => 'superAdmin',
                 'remember_token' => Str::random(10),
             ],

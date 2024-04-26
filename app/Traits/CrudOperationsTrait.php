@@ -2,7 +2,9 @@
 
 namespace App\Traits;
 
+use App\Models\StaffSocial;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Database\Eloquent\Collection;
 
 trait CrudOperationsTrait
 {
@@ -27,9 +29,19 @@ trait CrudOperationsTrait
     | Retrieve all records with relation
     |--------------------------------------------------------------------------
     */
-    public function getAllWithRelation($model, $relation, ...$columns)
+    public function getAllWithRelation($model, $relation, $columns)
     {
         return $model::with($relation)->get($columns);
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Retrieve records by Column
+    |--------------------------------------------------------------------------
+    */
+    public function getRelatedData($model, $FR, $id, $columns)
+    {
+        return $model::where($FR, $id)->get($columns);
     }
 
     /*
@@ -37,10 +49,43 @@ trait CrudOperationsTrait
     | Retrieve all records
     |--------------------------------------------------------------------------
     */
-    public function getRecord($model, ...$columns)
+    public function getRecord($model, $columns)
     {
-        return $model::get($columns);
+        if (empty($columns)) {
+            return $model::all();
+        } else {
+            return $model::get($columns);
+        }
     }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Handle Record records
+    |--------------------------------------------------------------------------
+    */
+    public function HandleRecord($record, $columns)
+    {
+        // If the record is a collection, iterate over it
+        if ($record instanceof Collection) {
+            $data = [];
+            foreach ($record as $subRecord) {
+                $recordData = [];
+                foreach ($columns as $column) {
+                    $recordData[$column] = $subRecord->$column ?? null;
+                }
+                $data[] = $recordData;
+            }
+            return $data;
+        } else {
+            $data = [];
+            foreach ($columns as $column) {
+                $data[$column] = $record->$column ?? null;
+            }
+            return $data;
+        }
+    }
+
 
     /*
     |--------------------------------------------------------------------------
@@ -61,6 +106,54 @@ trait CrudOperationsTrait
     {
         return $model::findOrFail($id);
     }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Insert Social to record
+    |--------------------------------------------------------------------------
+    */
+    public function insertSocial($request, $FK, $id)
+    {
+        $recordSocial = ['Facebook', 'Instagram', 'X', 'LinkedIN', 'GitHub'];
+
+        foreach ($recordSocial as $record) {
+            $link = $request->input($record);
+            if ($link) {
+                $image = $this->imageSocial($record);
+                StaffSocial::create([
+                    'name' => $record,
+                    'link' => $link,
+                    'image' => $image,
+                    'user_id' => $request->user_id,
+                    $FK => $id
+                ]);
+
+            }
+        }
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Update Social to record
+    |--------------------------------------------------------------------------
+    */
+    public function updateSocialLinks($request, $staffProgramId)
+    {
+        $recordSocial = ['Facebook', 'Instagram', 'X', 'LinkedIN', 'GitHub'];
+        foreach($recordSocial as $record){
+            $link = $request->input($record);
+            if ($link) {
+                $socialImage = $this->imageSocial($record);
+                StaffSocial::updateOrCreate(
+                    ['staff_programs_id' => $staffProgramId, 'name' => $record],
+                    ['link' => $link, 'image' => $socialImage, 'user_id' => $request->user_id]
+                );
+            }
+        }
+    }
+
+
 
     /*
     |--------------------------------------------------------------------------
@@ -113,7 +206,8 @@ trait CrudOperationsTrait
         $fileExtension = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
 
         $folders = [
-            'jpg' => 'images', 'jpeg' => 'images', 'png' => 'images', 'svg' => 'images', 'mp4' => 'video', 'pdf' => 'files', 'doc' => 'files', 'docx' => 'files', 'txt' => 'files', 'xls' => 'files', 'xlsx' => 'files',
+            'jpg' => 'images', 'jpeg' => 'images', 'png' => 'images', 'svg' => 'images', 'mp4' => 'video', 'pdf' => 'files',
+            'doc' => 'files', 'docx' => 'files', 'txt' => 'files', 'xls' => 'files', 'xlsx' => 'files',
         ];
 
         return $folders[$fileExtension] ?? 'files';
@@ -131,7 +225,9 @@ trait CrudOperationsTrait
         $imagePath = public_path('assets/' . $folder . '/' . $fileName);
 
         if (file_exists($imagePath)) {
-            unlink($imagePath);
+            if (is_file($imagePath)) {
+                unlink($imagePath);
+            }
         }
     }
 }

@@ -1,11 +1,10 @@
 <?php
 
-namespace App\Http\Controllers\applying;
+namespace App\Http\Controllers\Applying;
 
-use App\Http\Controllers\Controller;
 use App\Models\Applying;
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
 use App\Traits\CrudOperationsTrait;
@@ -15,6 +14,7 @@ class ApplyingController extends Controller
 {
     use CrudOperationsTrait;
     use HandleFile;
+
     /*
     |--------------------------------------------------------------------------
     | Validate Request Data Function
@@ -24,41 +24,67 @@ class ApplyingController extends Controller
     {
         $rules = [
             'title' => 'required|string',
+            'image' => 'required',
             'description' => 'required|string',
-            'image' => 'nullable|file',
-            'category' => 'required|in:administrative,teaching_staff,other,head_section,head_page',
+            'category' => 'required|in:staff,student',
+            'user_id' => 'required|exists:users,id',
         ];
         return $this->validateRequestData($request, $rules);
     }
 
     /*
     |--------------------------------------------------------------------------
-    | Index Function
+    | Index Staff Function
     |--------------------------------------------------------------------------
     */
-    public function index()
+    public function getStaff()
     {
         try {
-            $applyings = $this->getRecord(new Applying, 'id', 'title', 'description', 'image', 'category');
+            $staff = $this->getRelatedData(new Applying, 'category', 'staff', ['id', 'title', 'description', 'image']);
 
-            $category = [
-                'administrative' => [],
-                'teaching_staff' => [],
-                'other' => [],
-                'head_section' => [],
-                'head_page' => []
-            ];
-
-            foreach ($applyings as $applying) {
-                $category[$applying->category][] = $applying;
-            }
-
-            return response()->json($category, 200);
+            return response()->json(['data' => $staff], 200);
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['error' => 'Record not found'], 404);
         } catch (QueryException $e) {
-            return response()->json(['error' => 'Database error', 'details' => 'Failed to fetch applyings. Please try again later.'], 500);
+            return response()->json(['error' => 'Database error'], 500);
         }
     }
 
+    /*
+    |--------------------------------------------------------------------------
+    | Index Staff Function
+    |--------------------------------------------------------------------------
+    */
+    public function getStudent()
+    {
+        try {
+            $staff = $this->getRelatedData(new Applying, 'category', 'student', ['id', 'title', 'description', 'image']);
+
+            return response()->json(['data' => $staff], 200);
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['error' => 'Record not found'], 404);
+        } catch (QueryException $e) {
+            return response()->json(['error' => 'Database error'], 500);
+        }
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Show Function
+    |--------------------------------------------------------------------------
+    */
+    public function show($id)
+    {
+        try {
+            $apply = $this->findById(new Applying, $id);
+
+            return response()->json(['data' => $apply], 200);
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['error' => 'Record not found'], 404);
+        } catch (QueryException $e) {
+            return response()->json(['error' => 'Database error'], 500);
+        }
+    }
 
     /*
     |--------------------------------------------------------------------------
@@ -73,36 +99,16 @@ class ApplyingController extends Controller
                 return $validationResult;
             }
 
-            $data = $request->only(['title', 'description', 'category']);
+            $data = $request->only(['title', 'description', 'category', 'user_id']);
+            $data['image'] = $this->createFile($request, 'image', $request->title, 'image');
+
             $applying = $this->createRecord(new Applying, $data);
 
-            $imagePath = null;
-            if ($request->hasFile('image')) {
-                $imagePath = $this->createFile($request, 'image', $request->title, 'image');
-            }
-
-            $applying->update(['image' => $imagePath]);
-
-            return response()->json(['applying' => $applying, 'message' => 'Data has been created successfully'], 201);
-        } catch (QueryException $e) {
-            return response()->json(['error' => 'Database error', 'details' => 'Failed to create applying. Please try again later.'], 500);
-        }
-    }
-
-    /*
-    |--------------------------------------------------------------------------
-    | Show Function
-    |--------------------------------------------------------------------------
-    */
-    public function show($id)
-    {
-        try {
-            $applying = $this->findById(new Applying, $id);
-            return response()->json(['applying' => $applying], 200);
+            return response()->json(['data' => $applying, 'message' => 'Applying created successfully'], 201);
         } catch (ModelNotFoundException $e) {
-            return response()->json(['error' => 'Record not found', 'details' => 'The requested applying was not found.'], 404);
+            return response()->json(['error' => 'Record not found'], 404);
         } catch (QueryException $e) {
-            return response()->json(['error' => 'Database error', 'details' => 'Failed to fetch applying details. Please try again later.'], 500);
+            return response()->json(['error' => 'Database error'], 500);
         }
     }
 
@@ -119,17 +125,16 @@ class ApplyingController extends Controller
                 return $validationResult;
             }
 
-            $data = $request->only(['title', 'description', 'category']);
+            $data = $request->only(['title', 'description', 'category', 'user_id']);
+            $data['image'] = $this->updateFile($request, 'image', $applying->image, $request->title, 'image');
+
             $applying = $this->updateRecord(new Applying, $applying->id, $data);
 
-            if ($request->hasFile('image')) {
-                $imagePath = $this->updateFile($request, 'image', $applying->image, $request->title, 'image');
-                $applying->update(['image' => $imagePath]);
-            }
-
-            return response()->json(['applying' => $applying, 'message' => 'Data has been modified successfully'], 200);
+            return response()->json(['data' => $applying, 'message' => 'Applying updated successfully'], 200);
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['error' => 'Record not found'], 404);
         } catch (QueryException $e) {
-            return response()->json(['error' => 'Database error', 'details' => 'Failed to update applying. Please try again later.'], 500);
+            return response()->json(['error' => 'Database error'], 500);
         }
     }
 
@@ -142,8 +147,10 @@ class ApplyingController extends Controller
     {
         try {
             return $this->deleteRecord($applying, 'image');
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['error' => 'Record not found'], 404);
         } catch (QueryException $e) {
-            return response()->json(['error' => 'Database error', 'details' => 'Failed to delete applying. Please try again later.'], 500);
+            return response()->json(['error' => 'Database error'], 500);
         }
     }
 }
