@@ -412,7 +412,7 @@ Route::prefix('leader-council')->group(function () {
 });
 
 Route::prefix('message-feedbacks')->group(function () {
-    Route::middleware(['checkRole:superAdmin,admin,editor'])->group(function () {
+    Route::middleware(['checkRole:superAdmin,admin'])->group(function () {
     Route::get('/', [FeedbackController::class, 'index']);
     Route::get('/{id}', [FeedbackController::class, 'show']);
     Route::delete('/{feedback}', [FeedbackController::class, 'destroy']);
@@ -420,8 +420,8 @@ Route::prefix('message-feedbacks')->group(function () {
 });
 
 Route::prefix('contact-content')->group(function () {
-    Route::middleware(['checkRole:superAdmin,admin,editor'])->group(function () {
-    Route::get('/', [ContactController::class, 'index']);
     Route::post('/feedback', [ContactController::class, 'storeFeedback']);
+    Route::middleware(['checkRole:superAdmin,admin'])->group(function () {
+    Route::get('/', [ContactController::class, 'index']);
     });
 });

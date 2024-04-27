@@ -40,6 +40,17 @@ class StaffPrograms extends Model
         return $this->hasMany(StudyPlan::class);
     }
 
+    public function  certificates()
+    {
+        return  $this->hasMany(Certificates::class);
+    }
+
+    public function  researches()
+    {
+        return  $this->hasMany(Researches::class);
+    }
+
+    
     public function  staffSocial()
     {
         return  $this->hasMany(staffSocial::class);

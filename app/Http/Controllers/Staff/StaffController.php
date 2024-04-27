@@ -29,8 +29,8 @@ class StaffController extends Controller
     public function index()
     {
         try {
-            $getStaffMember = $this->getRecord(new StaffMembers, []);
-            $getStaffProgram = $this->getRecord(new StaffPrograms, []);
+            $getStaffMember = $this->getAllWithRelation(new StaffMembers, ['staffSocial','studyPlan','researches','certificates'],['id', 'name', 'image', 'position', 'description', 'email', 'cv', 'department_id', 'faculty_id']);
+            $getStaffProgram = $this->getAllWithRelation(new StaffPrograms, ['staffSocial','studyPlan','researches','certificates'], ['id', 'name', 'image', 'position', 'word', 'email', 'cv', 'department_id']);
             $getFacultyLeaders = $this->getRecord(new FacultyLeaders, []);
             $getFacultyAgentStaff = $this->getRecord(new FacultyAgentStaff, []);
             $getUniversityLeaders = $this->getRecord(new UniversityLeaders, []);

@@ -24,10 +24,14 @@ class StaffResource extends JsonResource
             'email' => $this->email,
             'cv' => $this->cv,
             'description' => $this->description ?? null,
-            'word' => $this->word ?? null, 
+            'word' => $this->word ?? null,
             'user_id' => $this->user_id,
             'faculty_id' => $this->faculty_id,
             'department_id' => $this->department_id,
+            'researches' => $this->researches ?? null,
+            'certificates' => $this->researches ?? null,
+            'staffSocial' => $this->researches ?? null,
+            'studyPlan' => $this->researches ?? null,
         ];
     }
 }

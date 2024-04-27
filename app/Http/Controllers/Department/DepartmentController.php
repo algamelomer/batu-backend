@@ -71,13 +71,13 @@ class DepartmentController extends Controller
             $department = $this->findWithRelation(new Department, ['jobOpportunities', 'studentProjects', 'staffMembers', 'staffPrograms', 'studyPlan'], $id);
 
             // Handle department record
-            $departmentData = $this->HandleRecord($department, ['id', 'name', 'image', 'logo', 'video', 'discription_video', 'vision', 'mission', 'user_id', 'faculty_id']);
+            $departmentData = $this->HandleRecord($department, ['id', 'name', 'image', 'logo', 'description','video', 'description_video', 'vision', 'mission', 'user_id', 'faculty_id']);
 
             // Handle jobOpportunities record
             $jobOpportunities = $this->HandleRecord($department->jobOpportunities, ['id', 'title', 'link']);
 
             // Handle studyPlan records
-            $studyPlan = $this->HandleRecord($department->studyPlan, ['id', 'name', 'acadenic_year', 'semester', 'description', 'credits', 'user_id', 'staff_programs_id', 'staff_members_id']);
+            $studyPlan = $this->HandleRecord($department->studyPlan, ['id', 'name', 'academic_year', 'semester', 'description', 'credits', 'user_id', 'staff_programs_id', 'staff_members_id']);
 
             // Handle studentProjects records
             $studentProjects = $this->HandleRecord($department->studentProjects, ['id', 'name', 'image', 'file', 'description', 'team_name', 'user_id']);
