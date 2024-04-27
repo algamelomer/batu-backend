@@ -421,7 +421,5 @@ Route::prefix('message-feedbacks')->group(function () {
 
 Route::prefix('contact-content')->group(function () {
     Route::post('/feedback', [ContactController::class, 'storeFeedback']);
-    Route::middleware(['checkRole:superAdmin,admin'])->group(function () {
     Route::get('/', [ContactController::class, 'index']);
-    });
 });
