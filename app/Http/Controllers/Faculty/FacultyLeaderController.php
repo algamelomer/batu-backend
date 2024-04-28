@@ -1,18 +1,16 @@
 <?php
 
-namespace App\Http\Controllers\Staff;
+namespace App\Http\Controllers\Faculty;
 
-use App\Models\StaffMembers;
-use App\Models\Certificates;
-use App\Models\Researches;
 use App\Http\Controllers\Controller;
+use App\Models\FacultyLeaders;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
 use App\Traits\CrudOperationsTrait;
 use App\Traits\HandleFile;
 
-class StaffMemberController extends Controller
+class FacultyLeaderController extends Controller
 {
     use CrudOperationsTrait;
     use HandleFile;
@@ -27,15 +25,13 @@ class StaffMemberController extends Controller
         $rules = [
             'name' => 'required|string',
             'image' => 'required',
-            'position' => 'required|string',
             'email' => 'nullable|email',
-            'description' => 'nullable|string',
-            'cv' => 'nullable',
-            'researches' => 'nullable|array',
-            'certificates' => 'nullable|array',
+            'word' => 'required|string',
+            'cv' => 'nullable|string',
+            'position' => 'required|string',
+            'category' => 'required|in:dean,vice',
+            'faculty_id' => 'required|exists:faculties,id',
             'user_id' => 'required|exists:users,id',
-            'faculty_id' => 'nullable|exists:faculties,id',
-            'department_id' => 'nullable|exists:departments,id',
             'Facebook' => 'nullable|url',
             'Instagram' => 'nullable|url',
             'X' => 'nullable|url',
@@ -53,9 +49,9 @@ class StaffMemberController extends Controller
     public function index()
     {
         try {
-            $staffMembers = $this->getAllWithRelation(new StaffMembers, 'studyPlan',['id', 'name', 'image', 'position', 'description', 'email', 'cv', 'department_id', 'faculty_id', 'user_id']);
-            return response()->json(['data' => $staffMembers], 200);
-        }catch (ModelNotFoundException $e) {
+            $facultyLeaders = $this->getAllWithRelation(new FacultyLeaders, 'staffSocial', ['id', 'name', 'image', 'email', 'word', 'cv', 'position', 'category', 'faculty_id', 'user_id']);
+            return response()->json(['data' => $facultyLeaders], 200);
+        } catch (ModelNotFoundException $e) {
             return response()->json(['error' => 'Record not found'], 404);
         } catch (QueryException $e) {
             return response()->json(['error' => 'Database error'], 500);
@@ -70,9 +66,9 @@ class StaffMemberController extends Controller
     public function show($id)
     {
         try {
-            $staffMembers = $this->findWithRelation(new StaffMembers, 'studyPlan', $id);
-            return response()->json(['data' => $staffMembers], 200);
-        }catch (ModelNotFoundException $e) {
+            $facultyLeader = $this->findWithRelation(new FacultyLeaders, 'staffSocial', $id);
+            return response()->json(['data' => $facultyLeader], 200);
+        } catch (ModelNotFoundException $e) {
             return response()->json(['error' => 'Record not found'], 404);
         } catch (QueryException $e) {
             return response()->json(['error' => 'Database error'], 500);
@@ -92,25 +88,18 @@ class StaffMemberController extends Controller
                 return $validationResult;
             }
 
-            // Create the staff member record
-            $data = $request->only(['name', 'position', 'user_id', 'faculty_id', 'department_id', 'email']);
+            $data = $request->only(['name', 'email', 'word', 'position', 'category', 'faculty_id', 'user_id']);
             $data['image'] = $this->createFile($request, 'image', $request->name, 'image');
-            $data['cv'] = $this->createFile($request, 'cv', $request->name . '_CV', 'file');
-            $staffMember = $this->createRecord(new StaffMembers, $data);
+            $data['cv'] = $this->createFile($request, 'cv', $request->name. '_CV', 'file');
 
-            // Insert the social links
-            $insertSocial = $this->insertSocial($request, 'staff_members_id', $staffMember->id);
+            $newFacultyLeader = $this->createRecord(new FacultyLeaders, $data);
+            $insertSocial = $this->insertSocial($request, 'faculty_leaders_id', $newFacultyLeader->id);
 
-            // Insert the researches
-            $this->insertRelatedDataOfStaff($request, new Researches, 'researches', 'staff_members_id',$staffMember->id);
-            // Insert the Certificates
-            $this->insertRelatedDataOfStaff($request, new Certificates ,'certificates', 'staff_members_id',$staffMember->id);
-
-            return response()->json(['data' => $staffMember, 'message' => 'Staff Member created successfully'], 201);
+            return response()->json(['data' => $newFacultyLeader, 'message' => 'Faculty leader created successfully'], 201);
         } catch (ModelNotFoundException $e) {
             return response()->json(['error' => 'Record not found'], 404);
         } catch (QueryException $e) {
-            return response()->json(['error' => 'Database error'. $e], 500);
+            return response()->json(['error' => 'Database error'], 500);
         }
     }
 
@@ -119,7 +108,7 @@ class StaffMemberController extends Controller
     | Update Function
     |--------------------------------------------------------------------------
     */
-    public function update(Request $request, StaffMembers $staffMember)
+    public function update(Request $request, FacultyLeaders $facultyLeader)
     {
         try {
             $validationResult = $this->validator($request);
@@ -127,21 +116,14 @@ class StaffMemberController extends Controller
                 return $validationResult;
             }
 
-            // Update the staff member record
-            $data = $request->only(['name', 'position', 'user_id', 'faculty_id', 'department_id', 'email']);
-            $data['image'] = $this->updateFile($request, 'image', $staffMember->image, $request->name, 'image');
-            $data['cv'] = $this->updateFile($request, 'cv', $staffMember->cv, $request->name . '_CV', 'file');
-            $updatedStaffMember = $this->updateRecord(new StaffMembers, $staffMember->id, $data);
+            $data = $request->only(['name', 'image', 'email', 'word', 'cv', 'position', 'category', 'faculty_id', 'user_id']);
+            $data['image'] = $this->updateFile($request, 'image', $facultyLeader->image, $request->name, 'image');
+            $data['cv'] = $this->updateFile($request, 'cv', $facultyLeader->cv, $request->name. '_CV', 'file');
 
-            // Update the social links
-            $this->updateSocialLinks($request, $staffMember->id);
+            $updatedFacultyLeader = $this->updateRecord(new FacultyLeaders, $facultyLeader->id, $data);
+            $updateSocial = $this->updateSocialLinks($request, $updatedFacultyLeader->id);
 
-            // Update the researches
-            $this->updateRelatedDataOfStaff($request, new Researches,'researches','staff_members_id',$staffMember->id);
-            // Update the certificates
-            $this->updateRelatedDataOfStaff($request, new Certificates,'certificates','staff_members_id',$staffMember->id);
-
-            return response()->json(['data' => $updatedStaffMember, 'message' => 'Staff Member updated successfully'], 200);
+            return response()->json(['data' => $updatedFacultyLeader, 'message' => 'Faculty leader updated successfully'], 200);
         } catch (ModelNotFoundException $e) {
             return response()->json(['error' => 'Record not found'], 404);
         } catch (QueryException $e) {
@@ -154,10 +136,10 @@ class StaffMemberController extends Controller
     | Destroy Function
     |--------------------------------------------------------------------------
     */
-    public function destroy(StaffMembers $staffMember)
+    public function destroy(FacultyLeaders $facultyLeader)
     {
         try {
-            return $this->deleteRecord($staffMember, 'image', 'cv');
+            return $this->deleteRecord($facultyLeader, 'image', 'cv');
         } catch (ModelNotFoundException $e) {
             return response()->json(['error' => 'Record not found'], 404);
         } catch (QueryException $e) {
@@ -165,3 +147,4 @@ class StaffMemberController extends Controller
         }
     }
 }
+

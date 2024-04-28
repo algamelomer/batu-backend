@@ -104,20 +104,19 @@ class ApplyController extends Controller
         try {
             $validator = Validator::make($request->all(), [
                 'name' => 'required|string',
-                'description' => 'required|string',
+                'description' => 'nullable|string',
                 'email' => 'required|email',
                 'phone' => 'required',
                 'position' => 'required',
-                'cv' => 'nullable',
+                'cv' => 'required',
             ]);
 
             if ($validator->fails()) {
                 return response()->json(['error' => $validator->errors()], 400);
             }
 
-            $data = $request->only(['name', 'description', 'email','position']);
-            $data['cv'] = $this->createFile($request, 'cv', $request->title, 'file');
-            $data['phone'] = $this->createFile($request, 'phone', $request->title, 'image');
+            $data = $request->only(['name', 'description', 'phone','email','position']);
+            $data['cv'] = $this->createFile($request, 'cv', $request->title. '_CV', 'file');
 
             $jobApplication = $this->createRecord(new JobApplications, $data);
 

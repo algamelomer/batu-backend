@@ -19,6 +19,7 @@ use App\Http\Controllers\Department\StudentProjectController;
 use App\Http\Controllers\Department\StudyPlanController;
 use App\Http\Controllers\Department\JobOpportunitiesController;
 // Faculty Model
+use App\Http\Controllers\Faculty\FacultyLeaderController;
 use App\Http\Controllers\Faculty\FacultyAgentStaffController;
 use App\Http\Controllers\Faculty\FacultyAgentController;
 use App\Http\Controllers\Faculty\FacultyController;
@@ -243,6 +244,17 @@ Route::prefix('faculty')->group(function () {
     });
 });
 
+Route::prefix('faculty-leaders')->group(function () {
+    Route::get('/', [FacultyLeaderController::class, 'index']);
+    Route::get('/{id}', [FacultyLeaderController::class, 'show']);
+
+    Route::middleware(['checkRole:superAdmin,admin,editor'])->group(function () {
+    Route::post('/', [FacultyLeaderController::class, 'store']);
+    Route::post('/{facultyLeader}', [FacultyLeaderController::class, 'update']);
+    Route::delete('/{facultyLeader}', [FacultyLeaderController::class, 'destroy']);
+    });
+});
+
 /*
 |--------------------------------------------------------------------------
 | Faculty Agents Routes
@@ -308,22 +320,22 @@ Route::prefix('staff-members')->group(function () {
     Route::get('/', [StaffMemberController::class, 'index']);
     Route::get('/{id}', [StaffMemberController::class, 'show']);
 
-    Route::middleware(['checkRole:superAdmin,admin,editor'])->group(function () {
+    // Route::middleware(['checkRole:superAdmin,admin,editor'])->group(function () {
     Route::post('/', [StaffMemberController::class, 'store']);
     Route::post('/{staffMember}', [StaffMemberController::class, 'update']);
     Route::delete('/{staffMember}', [StaffMemberController::class, 'destroy']);
-    });
+    // });
 });
 
 Route::prefix('staff-programs')->group(function () {
     Route::get('/', [StaffProgramsController::class, 'index']);
     Route::get('/{staffProgram}', [StaffProgramsController::class, 'show']);
 
-    Route::middleware(['checkRole:superAdmin,admin,editor'])->group(function () {
+    // Route::middleware(['checkRole:superAdmin,admin,editor'])->group(function () {
     Route::post('/', [StaffProgramsController::class, 'store']);
     Route::post('/{staffProgram}', [StaffProgramsController::class, 'update']);
     Route::delete('/{staffProgram}', [StaffProgramsController::class, 'destroy']);
-    });
+    // });
 });
 
 Route::prefix('staff-social')->group(function () {
@@ -404,6 +416,7 @@ Route::prefix('president-alerts')->group(function () {
 Route::prefix('leader-council')->group(function () {
     Route::get('/', [LeaderCouncilController::class, 'index']);
     Route::get('/{id}', [LeaderCouncilController::class, 'show']);
+
     Route::middleware(['checkRole:superAdmin,admin,editor'])->group(function () {
     Route::post('/', [LeaderCouncilController::class, 'store']);
     Route::post('/{leaderCouncil}', [LeaderCouncilController::class, 'update']);

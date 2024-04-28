@@ -102,17 +102,18 @@ trait HandleFile
     public function imageSocial($socialName)
     {
         $socialPath = [
-            'Facebook'=> '/assets/default/facebook.png',
-            'Instagram' => '/assets/default/instagram.png',
-            'X' => '/assets/default/x.png',
-            'LinkedIN' => '/assets/default/linkedin.png',
-            'GitHub' => '/assets/default/github.png'
+            'Facebook' => '/assets/default/facebook_icon.png',
+            'Instagram' => '/assets/default/instagram_icon.png',
+            'X' => '/assets/default/x_icon.png',
+            'LinkedIN' => '/assets/default/linkedin_icon.png',
+            'GitHub' => '/assets/default/github_icon.png'
         ];
-        foreach($socialPath as $key => $path){
-            if ($socialName === $key){
-                return $this->DomainName . $path;
-            }
+
+        if (array_key_exists($socialName, $socialPath)) {
+            return $this->DomainName . $socialPath[$socialName];
         }
+
         return null;
     }
+
 }

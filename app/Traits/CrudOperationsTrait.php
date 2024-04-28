@@ -3,8 +3,10 @@
 namespace App\Traits;
 
 use App\Models\StaffSocial;
+use App\Models\Researches;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Http\Request;
 
 trait CrudOperationsTrait
 {
@@ -115,20 +117,25 @@ trait CrudOperationsTrait
     */
     public function insertSocial($request, $FK, $id)
     {
-        $recordSocial = ['Facebook', 'Instagram', 'X', 'LinkedIN', 'GitHub'];
+        $socialLinks = [
+            'Facebook' => '/assets/default/facebook.png',
+            'Instagram' => '/assets/default/instagram.png',
+            'X' => '/assets/default/x.png',
+            'LinkedIN' => '/assets/default/linkedin.png',
+            'GitHub' => '/assets/default/github.png'
+        ];
 
-        foreach ($recordSocial as $record) {
-            $link = $request->input($record);
-            if ($link) {
-                $image = $this->imageSocial($record);
+        foreach ($socialLinks as $socialName => $socialImage) {
+            $link = $request->input($socialName);
+
+            if (isset($link)) {
                 StaffSocial::create([
-                    'name' => $record,
+                    'name' => $socialName,
                     'link' => $link,
-                    'image' => $image,
+                    'image' => $socialImage,
                     'user_id' => $request->user_id,
                     $FK => $id
                 ]);
-
             }
         }
     }
@@ -153,7 +160,52 @@ trait CrudOperationsTrait
         }
     }
 
+    /*
+    |--------------------------------------------------------------------------
+    | Insert Related Data to record of Staff
+    |--------------------------------------------------------------------------
+    */
 
+    public function insertRelatedDataOfStaff(Request $request, $model,$input, $FK, $id)
+    {
+        $researchesData = $request->input($input);
+        if (!empty($researchesData)) {
+            $researches = [];
+            foreach ($researchesData as $researchData) {
+                $researches[] = [
+                    'title' => $researchData['title'],
+                    'description' => $researchData['description'],
+                    'user_id' => $request->user_id,
+                    $FK => $id
+                ];
+            }
+            $model::insert($researches);
+        }
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Update Related Data to record of Staff
+    |--------------------------------------------------------------------------
+    */
+
+    public function updateRelatedDataOfStaff(Request $request, $model, $input, $FK, $id)
+    {
+        $researchesData = $request->input($input);
+        if (!empty($researchesData)) {
+            foreach ($researchesData as $researchData) {
+                $model::updateOrCreate(
+                    ['id' => $researchData['id']], // Assuming you have an ID for each research
+                    [
+                        'title' => $researchData['title'],
+                        'description' => $researchData['description'],
+                        'user_id' => $request->user_id,
+                        $FK => $id
+                    ]
+                );
+            }
+        }
+    }
 
     /*
     |--------------------------------------------------------------------------

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Staff;
 
+use App\Models\Certificates;
+use App\Models\Researches;
 use App\Http\Controllers\Controller;
 use App\Models\StaffPrograms;
 use Illuminate\Http\Request;
@@ -29,6 +31,8 @@ class StaffProgramsController extends Controller
             'email' => 'nullable|email',
             'word' => 'required|string',
             'cv' => 'nullable',
+            'researches' => 'nullable|array',
+            'certificates' => 'nullable|array',
             'user_id' => 'required|exists:users,id',
             'department_id' => 'required|exists:departments,id',
             'Facebook' => 'nullable|url',
@@ -48,7 +52,7 @@ class StaffProgramsController extends Controller
     public function index()
     {
         try {
-            $staffPrograms = $this->getAllWithRelation(new StaffPrograms, 'staffSocial',['id', 'name', 'image', 'position', 'word', 'email', 'cv', 'department_id', 'user_id']);
+            $staffPrograms = $this->getAllWithRelation(new StaffPrograms, 'staffSocial', ['id', 'name', 'image', 'position', 'word', 'email', 'cv', 'department_id', 'user_id']);
 
             return response()->json(['data' => $staffPrograms], 200);
         } catch (ModelNotFoundException $e) {
@@ -66,7 +70,7 @@ class StaffProgramsController extends Controller
     public function show($id)
     {
         try {
-            $staffPrograms = $this->findWithRelation(new StaffPrograms,'staffSocial', $id);
+            $staffPrograms = $this->findWithRelation(new StaffPrograms, 'staffSocial', $id);
             return response()->json(['data' => $staffPrograms], 200);
         } catch (ModelNotFoundException $e) {
             return response()->json(['error' => 'Record not found'], 404);
@@ -95,6 +99,11 @@ class StaffProgramsController extends Controller
             $staffProgram = $this->createRecord(new StaffPrograms, $data);
 
             $insertSocial = $this->insertSocial($request, 'staff_programs_id', $staffProgram->id);
+            // Insert the researches
+            $this->insertRelatedDataOfStaff($request, new Researches, 'researches', 'staff_programs_id', $staffProgram->id);
+            // Insert the Certificates
+            $this->insertRelatedDataOfStaff($request, new Certificates, 'certificates', 'staff_programs_id', $staffProgram->id);
+
 
             return response()->json(['data' => $staffProgram, 'message' => 'Staff Program created successfully'], 201);
         } catch (ModelNotFoundException $e) {
@@ -124,6 +133,10 @@ class StaffProgramsController extends Controller
 
             $staffProgram = $this->updateRecord(new StaffPrograms, $staffProgram->id, $data);
             $updateSocial = $this->updateSocialLinks($request, $staffProgram->id);
+            // Update the researches
+            $this->updateRelatedDataOfStaff($request, new Researches,'researches','staff_programs_id',$staffProgram->id);
+            // Update the certificates
+            $this->updateRelatedDataOfStaff($request, new Certificates,'certificates','staff_programs_id',$staffProgram->id);
 
             return response()->json(['data' => $staffProgram, 'message' => 'Staff Program updated successfully'], 200);
         } catch (ModelNotFoundException $e) {

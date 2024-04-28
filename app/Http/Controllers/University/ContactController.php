@@ -22,7 +22,6 @@ class ContactController extends Controller
             'description' => 'required|string',
             'phone' => 'required|min:11|max:11',
             'category' => 'required|in:proposal,question,complaint',
-            'user_id' => 'required|exists:users,id',
         ];
         return $this->validateRequestData($request, $rules);
     }
@@ -35,7 +34,7 @@ class ContactController extends Controller
     public function index()
     {
         try {
-            $socialLinks = $this->getRecord(new SocialLinks, ['id', 'name', 'image', 'link', 'user_id']);
+            $socialLinks = $this->getRecord(new SocialLinks, ['id', 'name', 'image', 'link']);
             $reason = ['Complaint', 'Question', 'Proposal'];
             return response()->json(['socialLinks' => $socialLinks, 'reason' => $reason], 200);
         } catch (ModelNotFoundException $e) {

@@ -17,7 +17,7 @@ return new class extends Migration
             $table->text('description');
             $table->foreignId('user_id')->constrained('users')->onUpdate('cascade')->onDelete('cascade');
             $table->foreignId('staff_programs_id')->nullable()->constrained('staff_programs')->onDelete( 'cascade')->onUpdate('cascade');
-            $table->foreignId('staff_members_id')->nullable()->constrained('staff_programs')->onDelete( 'cascade')->onUpdate('cascade');
+            $table->foreignId('staff_members_id')->nullable()->constrained('staff_members')->onDelete( 'cascade')->onUpdate('cascade');
             $table->timestamps();
         });
     }
