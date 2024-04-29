@@ -22,6 +22,7 @@ return new class extends Migration
             $table->foreignId('faculty_leaders_id')->nullable()->constrained('faculty_leaders')->onDelete( 'cascade')->onUpdate('cascade');
             $table->foreignId('university_leaders_id')->nullable()->constrained('university_leaders')->onDelete( 'cascade')->onUpdate('cascade');
             $table->foreignId('faculty_agent_staff_id')->nullable()->constrained('faculty_agent_staff')->onDelete( 'cascade')->onUpdate('cascade');
+            $table->foreignId('leader_council_id')->nullable()->constrained('leader_councils')->onDelete( 'cascade')->onUpdate('cascade');
             $table->timestamps();
         });
     }

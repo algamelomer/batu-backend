@@ -13,10 +13,15 @@ class LeaderCouncil extends Model
         'name',
         'image',
         'position',
+        'description',
         'user_id',
     ];
 
     public function  user() {
         return  $this->belongsTo(User::class);
+    }
+
+    public function  staffSocial() {
+        return  $this->hasMany(StaffSocial::class);
     }
 }

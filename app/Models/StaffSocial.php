@@ -18,6 +18,7 @@ class StaffSocial extends Model
         'staff_members_id',
         'staff_programs_id',
         'faculty_agent_staff_id',
+        'leader_council_id',
         'user_id',
     ];
     public function universityLeaders()
@@ -43,5 +44,10 @@ class StaffSocial extends Model
     public function  facultyAgentStaff()
     {
         return  $this->belongsTo(FacultyAgentStaff::class);
+    }
+
+    public function  leaderCouncil()
+    {
+        return  $this->belongsTo(LeaderCouncil::class, 'leader_council_id');
     }
 }

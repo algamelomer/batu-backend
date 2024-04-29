@@ -19,6 +19,7 @@ class LeaderCouncilFactory extends Factory
         return [
             'name' => $this->faker->name(),
             'image' => $this->faker->imageUrl(),
+            'description' => $this->faker->paragraph(),
             'position' => $this->faker->randomElement(['President', 'Vice President', 'Secretary', 'Treasurer']),
             'user_id' => $this->faker->randomElement($userIds),
             'created_at' => now(),

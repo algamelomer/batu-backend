@@ -31,6 +31,7 @@ class StaffSocialController extends Controller
             'faculty_leaders_id' => 'nullable|exists:faculty_leaders,id',
             'university_leaders_id' => 'nullable|exists:university_leaders,id',
             'faculty_agent_staff_id' => 'nullable|exists:faculty_agent_staff,id',
+            'leader_council_id' => 'nullable|exists:leader_councils,id',
         ];
         return $this->validateRequestData($request, $rules);
     }
@@ -48,7 +49,7 @@ class StaffSocialController extends Controller
                 return $validationResult;
             }
 
-            $data = $request->only(['name', 'link', 'user_id', 'staff_programs_id', 'staff_members_id', 'faculty_leaders_id', 'university_leaders_id', 'faculty_agent_staff_id']);
+            $data = $request->only(['name', 'link', 'user_id', 'staff_programs_id', 'staff_members_id', 'faculty_leaders_id', 'university_leaders_id', 'faculty_agent_staff_id', 'leader_council_id']);
             $data['image'] = $this->imageSocial($request->name, 'image');
             $staffSocial = $this->createRecord(new StaffSocial, $data);
 
@@ -73,7 +74,7 @@ class StaffSocialController extends Controller
                 return $validationResult;
             }
 
-            $data = $request->only(['name', 'link', 'user_id', 'staff_programs_id', 'staff_members_id', 'faculty_leaders_id', 'university_leaders_id', 'faculty_agent_staff_id']);
+            $data = $request->only(['name', 'link', 'user_id', 'staff_programs_id', 'staff_members_id', 'faculty_leaders_id', 'university_leaders_id', 'faculty_agent_staff_id', 'leader_council_id']);
             $data['image'] = $this->imageSocial($request->name, 'image');
             $staffSocial->update($data);
 

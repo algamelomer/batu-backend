@@ -46,11 +46,9 @@ class AboutUniversityController extends Controller
     {
         try {
             $universityInformation = $this->getRecord(new AboutUniversity, ['id', 'title', 'image', 'video', 'description', 'description_video', 'user_id']);
-            $leaderCouncil = $this->getRecord(new LeaderCouncil, ['id', 'name', 'image', 'position', 'user_id']);
-            $politics = $this->getRecord(new Politics, ['id', 'title', 'description']);
-            $PresidentInformation = $this->getRelatedData(new UniversityLeaders, 'position', 'President', ['id', 'name', 'image']);
+            $PresidentInformation = $this->getRelatedData(new UniversityLeaders, 'position', 'President', ['id', 'name', 'image', 'position', 'description', 'word']);
 
-            return response()->json(['university' => $universityInformation, 'universityCouncil' => $leaderCouncil, 'politics' => $politics, 'president' => $PresidentInformation], 200);
+            return response()->json(['university' => $universityInformation, 'president' => $PresidentInformation], 200);
         } catch (ModelNotFoundException $e) {
             return response()->json(['error' => 'Record not found'], 404);
         } catch (QueryException $e) {

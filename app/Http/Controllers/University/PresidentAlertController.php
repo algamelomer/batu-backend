@@ -29,7 +29,7 @@ class PresidentAlertController extends Controller
             return response()->json(['error' => 'Database error'], 500);
         }
     }
-    
+
         /*
         |--------------------------------------------------------------------------
         | Show Function
@@ -56,8 +56,8 @@ class PresidentAlertController extends Controller
     {
         try {
             $validationResult = $this->validateRequestData($request, [
-                'name' => 'required|string',
-                'email' => 'required|email',
+                'name' => 'nullable|string',
+                'email' => 'nullable|email',
                 'description' => 'required|string'
             ]);
 
